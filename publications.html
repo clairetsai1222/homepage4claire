@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Publications · Claire Tsai</title>
   <meta name="description" content="Publications by Claire Tsai." />
+  <!-- Favicon (browser tab icon) -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -24,65 +28,14 @@
       <p style="color:#57606a; font-size:0.95rem;">
         <span class="me" style="font-weight:600; color:#1f2328;">Bold</span>
         indicates my name. ✱ denotes equal contribution.
+        This list is generated automatically from
+        <code>publications.bib</code> — edit that file to add a paper.
       </p>
 
-      <!-- =====================================================
-           HOW TO ADD A PAPER:
-           Copy one <div class="pub"> ... </div> block below,
-           paste it above the others (newest first), and edit
-           the title, authors, venue, and links. Delete any
-           link you don't have.
-           ===================================================== -->
-
-      <!-- ---------- Paper 1 ---------- -->
-      <div class="pub">
-        <div class="num">1</div>
-        <div class="body">
-          <p class="ptitle">Title of Your First Paper Goes Here</p>
-          <p class="authors">
-            <span class="me">Claire Tsai</span>, Second Author, Third Author
-          </p>
-          <p class="venue">Conference / Journal Name, 2025</p>
-          <div class="links">
-            <a href="#" target="_blank" rel="noopener">PDF</a>
-            <a href="#" target="_blank" rel="noopener">arXiv</a>
-            <a href="#" target="_blank" rel="noopener">Code</a>
-            <a href="#" target="_blank" rel="noopener">DOI</a>
-          </div>
-        </div>
+      <!-- The list is built here by the script below. -->
+      <div id="pub-list">
+        <p style="color:#57606a;">Loading publications…</p>
       </div>
-
-      <!-- ---------- Paper 2 ---------- -->
-      <div class="pub">
-        <div class="num">2</div>
-        <div class="body">
-          <p class="ptitle">Title of Your Second Paper</p>
-          <p class="authors">
-            First Author, <span class="me">Claire Tsai</span>, Third Author
-          </p>
-          <p class="venue">Workshop / Journal Name, 2024</p>
-          <div class="links">
-            <a href="#" target="_blank" rel="noopener">PDF</a>
-            <a href="#" target="_blank" rel="noopener">arXiv</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- ---------- Paper 3 ---------- -->
-      <div class="pub">
-        <div class="num">3</div>
-        <div class="body">
-          <p class="ptitle">Title of Your Third Paper</p>
-          <p class="authors">
-            <span class="me">Claire Tsai</span>✱, Co-Author✱, Senior Author
-          </p>
-          <p class="venue">Preprint, 2024</p>
-          <div class="links">
-            <a href="#" target="_blank" rel="noopener">arXiv</a>
-          </div>
-        </div>
-      </div>
-
     </section>
 
   </div>
@@ -90,6 +43,182 @@
   <footer>
     © 2026 Claire Tsai · Built with plain HTML &amp; hosted on GitHub Pages.
   </footer>
+
+  <!-- =====================================================================
+       BibTeX → HTML renderer.
+       You should not need to touch this. To add papers, edit publications.bib.
+       ===================================================================== -->
+  <script>
+  (function () {
+    var ME = ["claire", "tsai"]; // your name parts, all must appear to bold you
+
+    function parseBib(str) {
+      var entries = [], i = 0, n = str.length;
+      while (i < n) {
+        while (i < n && str[i] !== "@") i++;
+        if (i >= n) break;
+        i++;
+        var type = "";
+        while (i < n && /[a-zA-Z]/.test(str[i])) { type += str[i]; i++; }
+        type = type.toLowerCase();
+        while (i < n && /\s/.test(str[i])) i++;
+        if (str[i] !== "{") continue;
+        i++;
+        if (type === "comment" || type === "preamble" || type === "string") {
+          var d = 1;
+          while (i < n && d > 0) { if (str[i] === "{") d++; else if (str[i] === "}") d--; i++; }
+          continue;
+        }
+        var key = "";
+        while (i < n && str[i] !== "," && str[i] !== "}") { key += str[i]; i++; }
+        key = key.trim();
+        if (str[i] === ",") i++;
+        var fields = {};
+        while (i < n) {
+          while (i < n && /[\s,]/.test(str[i])) i++;
+          if (str[i] === "}") { i++; break; }
+          var name = "";
+          while (i < n && /[a-zA-Z0-9_\-]/.test(str[i])) { name += str[i]; i++; }
+          name = name.toLowerCase();
+          while (i < n && /\s/.test(str[i])) i++;
+          if (str[i] !== "=") { while (i < n && str[i] !== "," && str[i] !== "}") i++; continue; }
+          i++;
+          while (i < n && /\s/.test(str[i])) i++;
+          var val = "";
+          if (str[i] === "{") {
+            var depth = 1; i++;
+            while (i < n) {
+              var c = str[i];
+              if (c === "{") { depth++; val += c; i++; }
+              else if (c === "}") { depth--; i++; if (depth === 0) break; val += "}"; }
+              else { val += c; i++; }
+            }
+          } else if (str[i] === '"') {
+            i++;
+            while (i < n && str[i] !== '"') { val += str[i]; i++; }
+            i++;
+          } else {
+            while (i < n && str[i] !== "," && str[i] !== "}") { val += str[i]; i++; }
+          }
+          fields[name] = val.trim();
+        }
+        if (key) entries.push({ type: type, key: key, fields: fields });
+      }
+      return entries;
+    }
+
+    function clean(s) {
+      if (!s) return "";
+      return s
+        .replace(/[{}]/g, "")
+        .replace(/\\&/g, "&")
+        .replace(/~/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+    function esc(s) {
+      return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+    function norm(s) {
+      return clean(s).toLowerCase().replace(/[.,]/g, "").split(/\s+/).filter(Boolean).sort().join(" ");
+    }
+    function isMe(name) {
+      var w = clean(name).toLowerCase();
+      return ME.every(function (p) { return w.indexOf(p) !== -1; });
+    }
+
+    function formatAuthors(authorStr, equalStr) {
+      var equal = (equalStr || "").split(",").map(function (x) { return norm(x); }).filter(Boolean);
+      var authors = authorStr.split(/\s+and\s+/i).map(function (a) { return a.trim(); }).filter(Boolean);
+      return authors.map(function (a) {
+        var name;
+        if (a.indexOf(",") !== -1) {
+          var parts = a.split(",");
+          name = (parts[1] ? parts[1].trim() + " " : "") + parts[0].trim();
+        } else { name = a; }
+        name = clean(name);
+        var out = esc(name);
+        if (equal.indexOf(norm(a)) !== -1 || equal.indexOf(norm(name)) !== -1) out += "✱";
+        if (isMe(name)) out = '<span class="me">' + out + "</span>";
+        return out;
+      }).join(", ");
+    }
+
+    function buildVenue(f) {
+      var venue = clean(f.booktitle || f.journal || f.note || "");
+      var extras = [];
+      if (f.volume) { var s = clean(f.volume); if (f.number) s += "(" + clean(f.number) + ")"; extras.push(s); }
+      if (f.pages) extras.push(clean(f.pages).replace(/--/g, "–"));
+      var line = venue;
+      if (extras.length) line += " " + extras.join(", ");
+      if (f.year) line += (line ? ", " : "") + clean(f.year);
+      return line;
+    }
+
+    var LINKS = [
+      ["pdf", "PDF", function (v) { return v; }],
+      ["arxiv", "arXiv", function (v) { return /^https?:/i.test(v) ? v : "https://arxiv.org/abs/" + v; }],
+      ["doi", "DOI", function (v) { return /^https?:/i.test(v) ? v : "https://doi.org/" + v; }],
+      ["code", "Code", function (v) { return v; }],
+      ["project", "Project", function (v) { return v; }],
+      ["slides", "Slides", function (v) { return v; }],
+      ["poster", "Poster", function (v) { return v; }],
+      ["video", "Video", function (v) { return v; }],
+      ["url", "Link", function (v) { return v; }]
+    ];
+
+    function buildLinks(f) {
+      var out = "";
+      LINKS.forEach(function (def) {
+        var raw = f[def[0]];
+        if (raw) {
+          var href = def[2](clean(raw));
+          out += '<a href="' + esc(href) + '" target="_blank" rel="noopener">' + def[1] + "</a>";
+        }
+      });
+      return out;
+    }
+
+    function render(entries) {
+      var box = document.getElementById("pub-list");
+      if (!entries.length) { box.innerHTML = '<p style="color:#57606a;">No entries found in publications.bib yet.</p>'; return; }
+      entries.sort(function (a, b) {
+        return (parseInt(clean(b.fields.year), 10) || 0) - (parseInt(clean(a.fields.year), 10) || 0);
+      });
+      var html = "";
+      entries.forEach(function (e, idx) {
+        var f = e.fields;
+        var title = clean(f.title);
+        var award = f.award ? clean(f.award) : "";
+        html += '<div class="pub">' +
+          '<div class="num">' + (idx + 1) + "</div>" +
+          '<div class="body">' +
+            '<p class="ptitle">' + esc(title) + "</p>" +
+            '<p class="authors">' + formatAuthors(f.author || "", f.equal) + "</p>" +
+            '<p class="venue">' + esc(buildVenue(f)) + "</p>" +
+            (award ? '<p class="award">' + esc(award) + "</p>" : "") +
+            '<div class="links">' + buildLinks(f) + "</div>" +
+          "</div>" +
+        "</div>";
+      });
+      box.innerHTML = html;
+    }
+
+    function showError() {
+      document.getElementById("pub-list").innerHTML =
+        '<p style="color:#57606a;">Could not load <code>publications.bib</code>. ' +
+        "This is normal if you opened this file directly from your computer — " +
+        "browsers block reading local files. It works automatically once the site is live on GitHub Pages. " +
+        'To preview locally, run <code>python -m http.server</code> in this folder and open ' +
+        "<code>http://localhost:8000/publications.html</code>.</p>";
+    }
+
+    fetch("publications.bib")
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
+      .then(function (txt) { render(parseBib(txt)); })
+      .catch(showError);
+  })();
+  </script>
 
 </body>
 </html>
