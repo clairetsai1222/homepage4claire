@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV · Claire Tsai</title>
+  <meta name="description" content="CV of Claire Tsai." />
+  <!-- Favicon (browser tab icon) -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* The CV itself is a self-contained design (own fonts/colors from
+       Claude Design). We only frame it with the site's nav + a fallback
+       link; we don't restyle its interior. */
+    .cv-frame-wrap {
+      max-width: 900px;
+      margin: 32px auto 0;
+      padding: 0 24px;
+    }
+    .cv-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+    }
+    .cv-toolbar a {
+      font-size: 0.85rem;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 4px 12px;
+      color: var(--accent);
+    }
+    .cv-toolbar a:hover { border-color: var(--accent); background: var(--bg-soft); }
+    iframe#cv-frame {
+      width: 100%;
+      height: 100vh;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      display: block;
+    }
+    noscript p {
+      padding: 24px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ NAVIGATION (keep identical to index.html) ============ -->
+  <nav>
+    <a class="brand" href="index.html">Claire Tsai</a>
+    <a href="index.html">About</a>
+    <a href="publications.html">Publications</a>
+    <a class="active" href="cv.html">CV</a>
+  </nav>
+
+  <div class="cv-frame-wrap">
+    <div class="cv-toolbar">
+      <a href="cv-bundle.html" target="_blank" rel="noopener">Open full screen ↗</a>
+    </div>
+    <iframe id="cv-frame" src="cv-bundle.html" title="Claire Tsai's CV" loading="lazy"></iframe>
+    <noscript>
+      <p>This CV requires JavaScript. <a href="cv-bundle.html">Open it directly</a> instead.</p>
+    </noscript>
+  </div>
+
+  <footer>
+    © 2026 Claire Tsai · Built with plain HTML &amp; hosted on GitHub Pages.
+  </footer>
+
+  <script>
+    // Auto-grow the iframe to fit the CV's real content height once it
+    // loads (same-origin on GitHub Pages, so this is allowed).
+    (function () {
+      var frame = document.getElementById("cv-frame");
+      frame.addEventListener("load", function () {
+        try {
+          var doc = frame.contentWindow.document;
+          var resize = function () {
+            var h = Math.max(
+              doc.documentElement.scrollHeight,
+              doc.body ? doc.body.scrollHeight : 0
+            );
+            if (h > 300) frame.style.height = h + "px";
+          };
+          resize();
+          setTimeout(resize, 500);
+          setTimeout(resize, 1500);
+        } catch (e) {
+          // Cross-origin (e.g. opened straight from local disk) — leave
+          // the 100vh fallback height in place.
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
