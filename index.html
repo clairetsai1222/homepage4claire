@@ -3,113 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- ▼▼ EDIT: your name shows in the browser tab ▼▼ -->
-  <title>Claire Tsai</title>
-  <meta name="description" content="Personal homepage of Claire Tsai." />
-  <!-- Favicon (browser tab icon) -->
+  <title>Claire Tsai · 蔡佩妤</title>
+  <meta name="description" content="Claire Tsai (蔡佩妤) — M.Eng student at Shanghai Jiao Tong University working on Vision-Language Models and embodied AI." />
+  <!-- Favicon -->
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body data-page="about">
 
-  <!-- ============ NAVIGATION (same on every page) ============ -->
-  <nav>
-    <a class="brand" href="index.html">Claire Tsai</a>
-    <a class="active" href="index.html">About</a>
-    <a href="publications.html">Publications</a>
-    <a href="cv.html">CV</a>
-  </nav>
+  <nav class="site-nav" id="site-nav"></nav>
+  <div class="lang-toggle" id="lang-toggle"></div>
 
-  <div class="wrap">
+  <main class="page" id="about-root">
+    <!-- Content is generated from site.js (edit that file to change your info). -->
+    <noscript>
+      <p style="padding:80px 0;">This page needs JavaScript to display. Please enable it, or view the source content in <code>site.js</code>.</p>
+    </noscript>
+  </main>
 
-    <!-- ============ INTRO ============ -->
-    <header class="hero">
-      <!-- ▼ EDIT: replace avatar.jpg with your own photo, or delete this <img> line ▼ -->
-      <img class="avatar" src="avatar.jpg"
-           alt="Portrait of Claire Tsai"
-           onerror="this.style.display='none'" />
-      <div class="who">
-        <h1>Claire Tsai</h1>
-        <p class="role">M.S. Student in [Your Field] · [Your University]</p>
-        <div class="contact">
-          <a href="mailto:claire.tsai12@gmail.com">Email</a>
-          <!-- ▼ EDIT: paste your real Google Scholar profile URL (Scholar → your profile → copy the address) ▼ -->
-          <a href="https://scholar.google.com/citations?user=YOUR_SCHOLAR_ID" target="_blank" rel="noopener">Google Scholar</a>
-          <!-- ▼ EDIT: paste your LinkedIn profile URL ▼ -->
-          <a href="https://www.linkedin.com/in/your-handle/" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://github.com/clairetsai1222" target="_blank" rel="noopener">GitHub</a>
-          <a href="cv.html">CV</a>
-        </div>
-      </div>
-    </header>
-
-    <!-- ============ ABOUT ============ -->
-    <section id="about">
-      <h2>About</h2>
-      <p>
-        <!-- ▼ EDIT: 2–4 sentence self introduction ▼ -->
-        Hi, I'm Claire Tsai, a master's student at
-        <strong>[Your University]</strong>, where I work on
-        <strong>[your main research topic]</strong>. My research focuses on
-        [one sentence on what you study and why it matters].
-      </p>
-      <p>
-        Before that, I received my B.S. in [Major] from [Undergraduate University].
-        I'm broadly interested in [a short phrase], and I enjoy [an interest or two —
-        e.g. building open-source tools, reading, hiking].
-      </p>
-    </section>
-
-    <!-- ============ RESEARCH INTERESTS ============ -->
-    <section id="interests">
-      <h2>Research Interests</h2>
-      <div class="tags">
-        <!-- ▼ EDIT: add / remove tags freely ▼ -->
-        <span>Machine Learning</span>
-        <span>Natural Language Processing</span>
-        <span>[Interest 3]</span>
-        <span>[Interest 4]</span>
-        <span>[Interest 5]</span>
-      </div>
-    </section>
-
-    <!-- ============ EDUCATION ============ -->
-    <section id="education">
-      <h2>Education</h2>
-
-      <div class="entry">
-        <div class="top">
-          <span class="title">M.S. in [Field] — [University]</span>
-          <span class="date">2024 – Present</span>
-        </div>
-        <div class="sub">Advisor: [Advisor Name]. Focus: [research focus].</div>
-      </div>
-
-      <div class="entry">
-        <div class="top">
-          <span class="title">B.S. in [Major] — [University]</span>
-          <span class="date">2020 – 2024</span>
-        </div>
-        <div class="sub">[Honors, GPA, or thesis topic — optional].</div>
-      </div>
-    </section>
-
-    <!-- ============ QUICK LINK TO PUBLICATIONS ============ -->
-    <section id="pub-teaser">
-      <h2>Publications</h2>
-      <p>
-        See my <a href="publications.html">full list of publications</a>.
-      </p>
-    </section>
-
-  </div>
-
-  <footer>
-    <!-- ▼ EDIT year / name ▼ -->
-    © 2026 Claire Tsai · Built with plain HTML &amp; hosted on GitHub Pages.
-  </footer>
-
+  <script src="site.js"></script>
 </body>
 </html>
